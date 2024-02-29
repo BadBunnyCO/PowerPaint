@@ -9,14 +9,15 @@ namespace PowerPaint
 {
     internal class MyText : Figure
     {
+
+        public Font drawFont { get; set; }
         public MyText(int x, int y, int width, int height) : base(x, y, width, height)
         {
-
+            drawFont = new Font("Arial", 16);
         }
 
         public override void draw(Graphics g)
         {
-            Font drawFont = new Font("Arial", 16);
             SolidBrush drawBrush = new SolidBrush(color);
             RectangleF drawRect = new RectangleF(x, y, width, height);
             StringFormat drawFormat = new StringFormat();

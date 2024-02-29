@@ -47,7 +47,6 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.PicPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -55,6 +54,7 @@
             this.вставитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.цветToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.свойстваToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
@@ -124,7 +124,7 @@
             // 
             this.какJpegToolStripMenuItem.Name = "какJpegToolStripMenuItem";
             this.какJpegToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.какJpegToolStripMenuItem.Text = "Как Jpeg";
+            this.какJpegToolStripMenuItem.Text = "Как изображение";
             this.какJpegToolStripMenuItem.Click += new System.EventHandler(this.какJpegToolStripMenuItem_Click);
             // 
             // загрузитьToolStripMenuItem
@@ -139,7 +139,7 @@
             // какФайлToolStripMenuItem
             // 
             this.какФайлToolStripMenuItem.Name = "какФайлToolStripMenuItem";
-            this.какФайлToolStripMenuItem.Size = new System.Drawing.Size(155, 26);
+            this.какФайлToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.какФайлToolStripMenuItem.Text = "Как файл";
             this.какФайлToolStripMenuItem.Click += new System.EventHandler(this.какФайлToolStripMenuItem_Click);
             // 
@@ -147,7 +147,7 @@
             // 
             this.какJpegToolStripMenuItem1.Name = "какJpegToolStripMenuItem1";
             this.какJpegToolStripMenuItem1.Size = new System.Drawing.Size(224, 26);
-            this.какJpegToolStripMenuItem1.Text = "Как Jpeg";
+            this.какJpegToolStripMenuItem1.Text = "Как изображение";
             this.какJpegToolStripMenuItem1.Click += new System.EventHandler(this.какJpegToolStripMenuItem1_Click);
             // 
             // выходToolStripMenuItem1
@@ -172,6 +172,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(119, 24);
             this.comboBox1.TabIndex = 0;
+            this.comboBox1.Text = "Инструменты";
             // 
             // button1
             // 
@@ -208,7 +209,7 @@
             this.groupBox1.Size = new System.Drawing.Size(586, 95);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Панель инструментов";
             // 
             // radioButton2
             // 
@@ -221,6 +222,7 @@
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Курсор";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // radioButton1
             // 
@@ -232,12 +234,12 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Инструменты";
             this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.AutoSize = true;
             this.groupBox2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.groupBox2.Controls.Add(this.listBox1);
             this.groupBox2.Controls.Add(this.PicPanel);
             this.groupBox2.Controls.Add(this.ResizePanel);
             this.groupBox2.Location = new System.Drawing.Point(20, 135);
@@ -248,16 +250,6 @@
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 16;
-            this.listBox1.Location = new System.Drawing.Point(1040, 23);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(159, 356);
-            this.listBox1.TabIndex = 7;
             // 
             // PicPanel
             // 
@@ -291,22 +283,23 @@
             this.копироватьToolStripMenuItem,
             this.вставитьToolStripMenuItem,
             this.цветToolStripMenuItem,
-            this.удалитьToolStripMenuItem});
+            this.удалитьToolStripMenuItem,
+            this.свойстваToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(211, 128);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(163, 124);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // копироватьToolStripMenuItem
             // 
             this.копироватьToolStripMenuItem.Name = "копироватьToolStripMenuItem";
-            this.копироватьToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.копироватьToolStripMenuItem.Size = new System.Drawing.Size(162, 24);
             this.копироватьToolStripMenuItem.Text = "Копировать";
             this.копироватьToolStripMenuItem.Click += new System.EventHandler(this.копироватьToolStripMenuItem_Click);
             // 
             // вставитьToolStripMenuItem
             // 
             this.вставитьToolStripMenuItem.Name = "вставитьToolStripMenuItem";
-            this.вставитьToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.вставитьToolStripMenuItem.Size = new System.Drawing.Size(162, 24);
             this.вставитьToolStripMenuItem.Text = "Вставить";
             this.вставитьToolStripMenuItem.Click += new System.EventHandler(this.вставитьToolStripMenuItem_Click);
             // 
@@ -324,6 +317,13 @@
             this.удалитьToolStripMenuItem.Text = "Удалить";
             this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
             // 
+            // свойстваToolStripMenuItem
+            // 
+            this.свойстваToolStripMenuItem.Name = "свойстваToolStripMenuItem";
+            this.свойстваToolStripMenuItem.Size = new System.Drawing.Size(162, 24);
+            this.свойстваToolStripMenuItem.Text = "Свойства";
+            this.свойстваToolStripMenuItem.Click += new System.EventHandler(this.свойстваToolStripMenuItem_Click);
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
@@ -340,7 +340,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainWin";
-            this.Text = "Form1";
+            this.Text = "PowerPant";
             this.Resize += new System.EventHandler(this.MainWin_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -369,7 +369,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel PicPanel;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -383,6 +382,7 @@
         private System.Windows.Forms.ToolStripMenuItem какJpegToolStripMenuItem1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem свойстваToolStripMenuItem;
     }
 }
 

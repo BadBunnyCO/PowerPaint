@@ -29,18 +29,20 @@ namespace PowerPaint
         
         PanelChangeSize PicSize;
 
-        ObjectList objectlist;
+        internal static ObjectList objectlist;
 
         MyPicture temp;
         // объект для копирования
         Figure copypust;
 
         // Номер выбранного объекта
-        int numselobj = -1;
+        public static int numselobj = -1;
         // Статус нажатия левой кнопки мыши
         bool leftmousepress = false;
         // Статус нажатия правой кнопки мыши
         bool rightmousepress = false;
+
+        WinOptions wo;
 
 
         int ax, ay, bx, by, ex, ey;
@@ -62,6 +64,7 @@ namespace PowerPaint
             button2.BackColor = SecondColor;
             // диалоговое окно цвета
             MyDialog = new ColorDialog();
+            MyDialog.AllowFullOpen = true;
 
             // класс для изменения размера области рисования
             PicSize = new PanelChangeSize(ResizePanel, PicPanel);
@@ -169,9 +172,52 @@ namespace PowerPaint
         {
             if (numselobj != -1 && objectlist.list[numselobj].selected)
             {
-                if (MyDialog.ShowDialog() == DialogResult.OK)
-                objectlist.list[numselobj].ChangeColor(MyDialog.Color);
-                PicPanel.Refresh();
+                // Изменения MyText через кнопку цвет с редактирование шрифта
+                if (objectlist.list[numselobj] is MyText)
+                {
+                    FontDialog fd = new FontDialog();
+                    fd.ShowColor = true;
+                    if(fd.ShowDialog() == DialogResult.OK)
+                    {
+                        MyText temp = new MyText(objectlist.list[numselobj].x, 
+                            objectlist.list[numselobj].y, 
+                            objectlist.list[numselobj].width, 
+                            objectlist.list[numselobj].height);
+
+                        temp.color = fd.Color;
+                        temp.drawFont = fd.Font;
+                        objectlist.list.RemoveAt(numselobj);
+                        objectlist.list.Add(temp);
+                        PicPanel.Refresh();
+
+                    }
+                }
+                // Изменения картинки у MyPicture
+                if (objectlist.list[numselobj] is MyPicture)
+                {
+
+                    var temp = objectlist.list[numselobj];
+                    objectlist.list.RemoveAt(numselobj);
+                    MyPicture f = new MyPicture(temp.x, temp.y, temp.width, temp.height);
+
+                    openFileDialog1.Filter = "JPEG (*.jpg)|*.jpg|All files(*.*)|*.*";
+                    if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        f.SetPicture(openFileDialog1.FileName);
+                        objectlist.list.Add(f);
+                    }
+                    PicPanel.Refresh();
+
+                }
+                else
+                {
+                    if (MyDialog.ShowDialog() == DialogResult.OK)
+                        objectlist.list[numselobj].ChangeColor(MyDialog.Color);
+                    PicPanel.Refresh();
+                }
+
+
+                
             }
         }
 
@@ -223,6 +269,14 @@ namespace PowerPaint
                 string serialized = File.ReadAllText(openFileDialog1.FileName);
                 // десериализуем текст и запимываем данные в оьъект
                 objectlist = JsonConvert.DeserializeObject<ObjectList>(serialized, settings);
+                if (File.Exists(objectlist.backpic))
+                {
+                    picture = new Bitmap(objectlist.backpic);
+                }
+                else
+                {
+                    MessageBox.Show("Чайть фалов была потеряна","Внимание");
+                }
                 PicPanel.Refresh();
             }
         }
@@ -270,31 +324,39 @@ namespace PowerPaint
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 picture = new Bitmap(openFileDialog1.FileName);
+                objectlist.backpic = openFileDialog1.FileName;
                 PicPanel.Refresh();
             }
 
         }
 
+
+        // Обновление зоны рисования при изменении размера 
         private void PicPanel_Resize(object sender, EventArgs e)
         {
             PicPanel.Refresh();
         }
 
+        // Обновление зоны изменения размера при изменении размера 
         private void ResizePanel_Resize(object sender, EventArgs e)
         {
             ResizePanel.Refresh();
         }
 
+        // Функция копировать
         private void копироватьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(numselobj != -1)
             {
                 copypust = objectlist.list[numselobj].Clone();
+                copypust.color = objectlist.list[numselobj].color;
             }
         }
 
+        // Функция вставить
         private void вставитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             if (copypust != null)
             {
                 copypust.Move(ex, ey);
@@ -302,6 +364,28 @@ namespace PowerPaint
                 PicPanel.Refresh();
             }
 
+        }
+
+        private void свойстваToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (numselobj != -1)
+            {
+                wo = new WinOptions();
+                wo.Show();
+            }
+        }
+
+
+        //// Изменения курсора от типа иструмента
+        // Для курсора
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            PicPanel.Cursor = Cursors.Default;
+        }
+        // Для рисования
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            PicPanel.Cursor = Cursors.Cross;
         }
 
         private void PicPanel_MouseDown(object sender, MouseEventArgs e)
@@ -397,7 +481,7 @@ namespace PowerPaint
                             var temp = objectlist.list[objectlist.list.Count-1];
                             objectlist.list.RemoveAt(objectlist.list.Count-1);
                             MyPicture f = new MyPicture(temp.x,temp.y,temp.width,temp.height);
-                            MessageBox.Show(temp.GetType().ToString());
+                            
                             openFileDialog1.Filter = "JPEG (*.jpg)|*.jpg|All files(*.*)|*.*";
                             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                             {
@@ -449,6 +533,7 @@ namespace PowerPaint
                     if (numselobj != -1 && objectlist.list[numselobj].selected)
                     {
                         objectlist.list[numselobj].Move(ex, ey, ax, ay);
+                        //wo.ReciveDate();
                         PicPanel.Refresh();
                     }
                 }
