@@ -27,7 +27,7 @@ namespace PowerPaint
 
         private void WinOptions_Load(object sender, EventArgs e)
         {
-            MessageBox.Show(MainWin.numselobj.ToString());
+            //MessageBox.Show(MainWin.numselobj.ToString());
             numobject = MainWin.numselobj;
             button1.BackColor = MainWin.objectlist.list[numobject].color;
             ReciveDate();

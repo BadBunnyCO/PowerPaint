@@ -1,16 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Newtonsoft.Json;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+
 
 
 
@@ -136,7 +130,7 @@ namespace PowerPaint
 
         
 
-        // палитра 1
+        // палитры
         private void button1_Click(object sender, EventArgs e)
         {
             if (MyDialog.ShowDialog() == DialogResult.OK)
@@ -149,14 +143,49 @@ namespace PowerPaint
             if (MyDialog.ShowDialog() == DialogResult.OK)
                 button2.BackColor = MyDialog.Color;
         }
+        ////////////////////////////////////////////
 
-
-        
+        // настройка отображения функций в выпадающем меню на правую кнопку
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
+            if(copypust != null)
+            {
+                вставитьToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                вставитьToolStripMenuItem.Enabled = false;
+            }
+            if(numselobj != -1)
+            {
+                копироватьToolStripMenuItem.Enabled = true;
+                цветToolStripMenuItem.Enabled = true;
+                удалитьToolStripMenuItem.Enabled = true;
+                свойстваToolStripMenuItem.Enabled = true;
+                if (objectlist.list[numselobj] is MyText)
+                {
+                    цветToolStripMenuItem.Text = "Шрифт";
+                }
+                else if (objectlist.list[numselobj] is MyPicture)
+                {
+                    цветToolStripMenuItem.Text = "Выбор изображения";
+                }
+                else
+                {
+                    цветToolStripMenuItem.Text = "Палитра";
+                }
 
+            }
+            else
+            {
+                копироватьToolStripMenuItem.Enabled = false;
+                цветToolStripMenuItem.Enabled = false;
+                удалитьToolStripMenuItem.Enabled = false;
+                свойстваToolStripMenuItem.Enabled = false;
+            }
         }
 
+        // Выпадающее меню по правой кнопки мыши, пункт удалить
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (numselobj != -1 && objectlist.list[numselobj].selected)
@@ -168,6 +197,8 @@ namespace PowerPaint
             }
         }
 
+
+        // Выпадающее меню по правой кнопки мыши, пункт цвет/шрифт/выбор изображения
         private void цветToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (numselobj != -1 && objectlist.list[numselobj].selected)
@@ -193,7 +224,7 @@ namespace PowerPaint
                     }
                 }
                 // Изменения картинки у MyPicture
-                if (objectlist.list[numselobj] is MyPicture)
+                else if (objectlist.list[numselobj] is MyPicture)
                 {
 
                     var temp = objectlist.list[numselobj];
@@ -221,6 +252,7 @@ namespace PowerPaint
             }
         }
 
+        // Выпадающее меню файл/новый файл
         private void новыйФайлToolStripMenuItem_Click(object sender, EventArgs e)
         {
             objectlist.list.Clear();
@@ -360,12 +392,15 @@ namespace PowerPaint
             if (copypust != null)
             {
                 copypust.Move(ex, ey);
-                objectlist.list.Add(copypust);
+                objectlist.list.Add(copypust.Clone());
+                objectlist.list[objectlist.list.Count - 1].color = copypust.color;
                 PicPanel.Refresh();
             }
 
         }
 
+
+        // Вызов окна свойств
         private void свойстваToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (numselobj != -1)
@@ -387,7 +422,7 @@ namespace PowerPaint
         {
             PicPanel.Cursor = Cursors.Cross;
         }
-
+        ///////////////////////////////////
         private void PicPanel_MouseDown(object sender, MouseEventArgs e)
         {
             
@@ -467,6 +502,7 @@ namespace PowerPaint
             }
         }
 
+        // Событие поднятия кнопки мышки по зоне рисования
         private void PicPanel_MouseUp(object sender, MouseEventArgs e)
         {
             if (leftmousepress)
@@ -504,6 +540,7 @@ namespace PowerPaint
 
         }
 
+        // Событие клика мышки по зоне рисования
         private void PicPanel_MouseClick(object sender, MouseEventArgs e)
         {
             if(MouseButtons == MouseButtons.Right)
@@ -512,6 +549,7 @@ namespace PowerPaint
             }
         }
 
+        // Событие движения мышки по зоне рисования
         private void PicPanel_MouseMove(object sender, MouseEventArgs e)
         {
             ex = e.X;
@@ -546,7 +584,7 @@ namespace PowerPaint
 
         }
 
-        
+        // Отрисовка объектов
         private void PicPanel_Paint(object sender, PaintEventArgs e)
         {
             //e.Graphics.Clear(Color.White);
