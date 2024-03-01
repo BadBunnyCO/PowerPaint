@@ -10,12 +10,12 @@ namespace PowerPaint
 
         }
 
+
         public override void draw(Graphics g)
         {
             Pen pen = new Pen(color, 5);
-            Point p1 = new Point(x, y);
-            Point p2 = new Point(x + width, y + height);
-            g.DrawLine(pen, p1, p2);
+            //p2 = new Point(x + width, y + height);
+            g.DrawLine(pen, p2, p1);
             if (selected)
             {
                 select_draw(g);

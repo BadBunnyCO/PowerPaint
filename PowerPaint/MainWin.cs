@@ -55,7 +55,7 @@ namespace PowerPaint
 
             // цвет 
             button1.BackColor = FirsColor;
-            button2.BackColor = SecondColor;
+            
             // диалоговое окно цвета
             MyDialog = new ColorDialog();
             MyDialog.AllowFullOpen = true;
@@ -118,7 +118,7 @@ namespace PowerPaint
             
             if (e.Button == MouseButtons.Left)
             {
-                label1.Text = e.X.ToString() + "  " + e.Y.ToString();
+                
 
                 PicSize.Resize(e.X, e.Y);
             }
@@ -137,17 +137,13 @@ namespace PowerPaint
                 button1.BackColor = MyDialog.Color;
         }
         // 
-        // палитра 2
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (MyDialog.ShowDialog() == DialogResult.OK)
-                button2.BackColor = MyDialog.Color;
-        }
+
         ////////////////////////////////////////////
 
         // настройка отображения функций в выпадающем меню на правую кнопку
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
+            
             if(copypust != null)
             {
                 вставитьToolStripMenuItem.Enabled = true;
@@ -256,6 +252,7 @@ namespace PowerPaint
         private void новыйФайлToolStripMenuItem_Click(object sender, EventArgs e)
         {
             objectlist.list.Clear();
+            numselobj = -1;
             picture = new Bitmap(PicPanel.Width, PicPanel.Height);
             PicPanel.Refresh();
         }
@@ -422,7 +419,15 @@ namespace PowerPaint
         {
             PicPanel.Cursor = Cursors.Cross;
         }
-        ///////////////////////////////////
+
+        private void contextMenuStrip1_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+        {
+            rightmousepress = false;
+            leftmousepress = false;
+        }
+
+
+        // 
         private void PicPanel_MouseDown(object sender, MouseEventArgs e)
         {
             
@@ -431,7 +436,6 @@ namespace PowerPaint
             if (MouseButtons == MouseButtons.Left)
             {
                 leftmousepress = true;
-
                 if (radioButton1.Checked)
                 {
                     switch (comboBox1.Text)
@@ -490,14 +494,40 @@ namespace PowerPaint
                     }
                     PicPanel.Refresh();
                 }
+
+                // Размер
+                if (radioButton3.Checked)
+                {
+                    numselobj = -1;
+                    for (int i = 0; i < objectlist.list.Count; i++)
+                    {
+                        if (objectlist.list[i].Selected(ex, ey))
+                        {
+                            numselobj = i;
+                            ax = objectlist.list[i].x - ex;
+                            ay = objectlist.list[i].y - ey;
+                        };
+                    }
+                    PicPanel.Refresh();
+                }
             }
 
             if (MouseButtons == MouseButtons.Right)
             {
                 rightmousepress = true;
-                foreach (Figure obj in objectlist.list)
+                if (radioButton2.Checked)
                 {
-                    obj.Selected(ex,ey);
+                    numselobj = -1;
+                    for (int i = 0; i < objectlist.list.Count; i++)
+                    {
+                        if (objectlist.list[i].Selected(ex, ey))
+                        {
+                            numselobj = i;
+                            ax = objectlist.list[i].x - ex;
+                            ay = objectlist.list[i].y - ey;
+                        };
+                    }
+                    PicPanel.Refresh();
                 }
             }
         }
@@ -543,10 +573,7 @@ namespace PowerPaint
         // Событие клика мышки по зоне рисования
         private void PicPanel_MouseClick(object sender, MouseEventArgs e)
         {
-            if(MouseButtons == MouseButtons.Right)
-            {
-                
-            }
+
         }
 
         // Событие движения мышки по зоне рисования
@@ -558,7 +585,6 @@ namespace PowerPaint
             // действие при зажатой мышке
             if (leftmousepress)
             {
-                label1.Text = ex + " " + ey;
                 // инструменты
                 if (radioButton1.Checked)
                 {
@@ -576,12 +602,16 @@ namespace PowerPaint
                     }
                 }
 
-
-
+                if (radioButton3.Checked)
+                {
+                    if (numselobj != -1 && objectlist.list[numselobj].selected)
+                    {
+                        objectlist.list[numselobj].ResizeCor(ex, ey);
+                        //wo.ReciveDate();
+                        PicPanel.Refresh();
+                    }
+                }
             }
-            
-
-
         }
 
         // Отрисовка объектов
