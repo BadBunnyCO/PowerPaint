@@ -95,19 +95,12 @@ namespace PowerPaint
             this.x = x+a;
             this.y = y+b;
 
-
-            
-
             int x1 = p1.X+(this.x - xt);
             int y1 = p1.Y+(this.y -yt);
             int x2 = p2.X+ (this.x - xt);
             int y2 = p2.Y+ (this.y - yt);
             p1 = new Point(x1, y1);
             p2 = new Point(x2, y2);
-
-
-
-
         }
 
         public bool Selected(int x, int y)

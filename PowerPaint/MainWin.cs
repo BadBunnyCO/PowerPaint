@@ -298,14 +298,15 @@ namespace PowerPaint
                 string serialized = File.ReadAllText(openFileDialog1.FileName);
                 // десериализуем текст и запимываем данные в оьъект
                 objectlist = JsonConvert.DeserializeObject<ObjectList>(serialized, settings);
-                if (File.Exists(objectlist.backpic))
+                /*if (File.Exists(objectlist.backpic))
                 {
                     picture = new Bitmap(objectlist.backpic);
                 }
                 else
                 {
-                    MessageBox.Show("Чайть фалов была потеряна","Внимание");
+                    MessageBox.Show("Часть фалов была потеряна","Внимание");
                 }
+                */
                 PicPanel.Refresh();
             }
         }
@@ -352,6 +353,7 @@ namespace PowerPaint
             openFileDialog1.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|PNG|*.png|EMF|*.emf|All files(*.*)|*.*";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                objectlist.list.Clear();
                 picture = new Bitmap(openFileDialog1.FileName);
                 objectlist.backpic = openFileDialog1.FileName;
                 PicPanel.Refresh();
@@ -588,8 +590,40 @@ namespace PowerPaint
                 // инструменты
                 if (radioButton1.Checked)
                 {
-                    objectlist.list[objectlist.list.Count-1].ResizeCor(ex, ey);
-                    PicPanel.Refresh();
+                    switch (comboBox1.Text)
+                    {
+                        case "Прямоугольник":
+                            objectlist.list[objectlist.list.Count - 1].ResizeCor(ex, ey);
+                            PicPanel.Refresh();
+                            break;
+
+                        case "Круг":
+                            objectlist.list[objectlist.list.Count - 1].ResizeCor(ex, ey);
+                            PicPanel.Refresh();
+                            break;
+
+                        case "Треугольник":
+                            objectlist.list[objectlist.list.Count - 1].ResizeCor(ex, ey);
+                            PicPanel.Refresh();
+                            break;
+
+                        case "Линия":
+                            objectlist.list[objectlist.list.Count - 1].ResizeCor(ex, ey);
+                            PicPanel.Refresh();
+                            break;
+
+                        case "Текст":
+                            objectlist.list[objectlist.list.Count - 1].ResizeCor(ex, ey);
+                            PicPanel.Refresh();
+                            break;
+
+                        case "Картинка":
+                            objectlist.list[objectlist.list.Count - 1].ResizeCor(ex, ey);
+                            PicPanel.Refresh();
+                            break;
+
+                    }        
+                    
                 }
                 // курсор
                 if (radioButton2.Checked)
